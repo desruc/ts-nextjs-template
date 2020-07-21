@@ -1,31 +1,22 @@
 import React from 'react';
-import {
-  GetStaticProps,
-  NextPage,
-  GetStaticPropsContext,
-  GetStaticPropsResult,
-} from 'next';
+import { NextPage, GetServerSidePropsResult } from 'next';
+import IndexContent from '~/screens/IndexContent';
 
 interface IndexProps {
-  greeting: string;
+  serverGreeting: string;
 }
 
 const IndexPage: NextPage<IndexProps> = (props: IndexProps) => {
-  const { greeting } = props;
-
-  return (
-    <div>
-      <h1>{greeting}</h1>
-    </div>
-  );
+  const { serverGreeting } = props;
+  return <IndexContent serverGreeting={serverGreeting} />;
 };
 
-export const getStaticProps: GetStaticProps = async (
-  context: GetStaticPropsContext,
-): Promise<GetStaticPropsResult<IndexProps>> => ({
-  props: {
-    greeting: 'Hello World!',
-  },
-});
+export async function getServerSideProps(): Promise<
+  GetServerSidePropsResult<IndexProps>
+> {
+  return {
+    props: { serverGreeting: 'Hello from the server!' } // will be passed to the page component as props
+  };
+}
 
 export default IndexPage;
